@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fafaf8">
+<title>Study Prompts</title>
+<style>
+:root{--bg:#fafaf8;--paper:#fff;--ink:#191a18;--muted:#73766f;--line:#e7e8e2;--green:#315d46;--soft:#edf3ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{max-width:1080px;margin:auto;padding:25px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:700;letter-spacing:-.04em}.brand span{color:var(--green)}.hint{font-size:13px;color:var(--muted)}
+main{max-width:1080px;margin:auto;padding:58px 28px 78px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--green);font-weight:700}
+h1{font-size:clamp(38px,6vw,62px);line-height:1.04;letter-spacing:-.06em;font-weight:550;margin:15px 0;max-width:680px}
+.lead{font-size:16px;color:var(--muted);max-width:590px;margin:0 0 38px}
+.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:17px}
+input,textarea,select{font:inherit}.search{flex:1;min-width:220px;max-width:430px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;outline:none}.search:focus,textarea:focus,input:focus,select:focus{border-color:#8ca394;outline:none}
+button{font:inherit;cursor:pointer}.primary{background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:8px;padding:11px 16px}.primary:hover{background:var(--green);border-color:var(--green)}
+.collections{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:18px 0 43px}
+.collection{background:var(--paper);border:1px solid var(--line);border-radius:10px;text-align:left;padding:19px;min-height:137px;transition:.15s}.collection:hover,.collection.active{background:var(--soft);border-color:#9eb2a2}
+.collection small{font-size:10px;letter-spacing:.12em;color:var(--muted)}.collection h2{font-size:18px;letter-spacing:-.03em;margin:16px 0 3px;font-weight:600}.collection p{font-size:13px;color:var(--muted);margin:0}
+.sectionhead{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}.sectionhead h2{font-size:22px;letter-spacing:-.04em;font-weight:550;margin:0}.count{font-size:12px;color:var(--muted)}
+.cards{display:grid;gap:10px}.prompt{background:#fff;border:1px solid var(--line);border-radius:9px;padding:17px;display:flex;justify-content:space-between;align-items:center;gap:18px}.prompt h3{font-size:15px;margin:0 0 3px;font-weight:650}.prompt p{font-size:13px;color:var(--muted);margin:0}.actions{display:flex;gap:8px;flex-shrink:0}.small{background:#fff;border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:13px}.small:hover{background:var(--soft)}
+.empty{background:#fff;border:1px dashed #d4d7cf;border-radius:9px;padding:30px;text-align:center;color:var(--muted)}
+footer{max-width:1080px;margin:auto;border-top:1px solid var(--line);padding:20px 28px 32px;font-size:12px;color:var(--muted)}
+dialog{border:1px solid var(--line);border-radius:13px;padding:0;width:min(560px,calc(100% - 28px));box-shadow:0 22px 70px #0002}dialog::backdrop{background:#10151088}.modal{padding:24px}.modal h2{font-size:22px;margin:0 0 17px}.field{display:grid;gap:6px;margin:13px 0}.field label{font-size:13px;color:#555}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px;background:white}.field textarea{min-height:180px;resize:vertical}.modalfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:680px){header{padding:20px 18px}.hint{display:none}main{padding:42px 18px 58px}.collections{grid-template-columns:1fr;gap:9px}.collection{min-height:unset;padding:15px}.collection h2{margin:8px 0 2px}.prompt{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions button{flex:1}footer{padding-inline:18px}}
+</style>
+</head>
+<body>
+<header><div class="brand">study<span>/</span>prompts</div><div class="hint">A tidy home for useful study prompts</div></header>
+<main>
+<div class="eyebrow">Your prompt library</div>
+<h1>Learn better.<br>One good prompt at a time.</h1>
+<p class="lead">Browse study assistants, keep useful prompts close, and copy them into ChatGPT or another AI assistant whenever you need them.</p>
+<div class="toolbar"><input class="search" id="search" type="search" placeholder="Search prompts…" aria-label="Search prompts"><button class="primary" id="add">＋ Add prompt</button></div>
+<div class="collections" id="collections">
+<button class="collection active" data-category="all"><small>01 / LIBRARY</small><h2>All prompts</h2><p>Explore every saved prompt</p></button>
+<button class="collection" data-category="btech"><small>02 / ENGINEERING</small><h2>B.Tech + CS AI agent</h2><p>Engineering and computer science</p></button>
+<button class="collection" data-category="cbse"><small>03 / SCHOOL</small><h2>CBSE AI agent</h2><p>School learning and exam practice</p></button>
+<button class="collection" data-category="icse"><small>04 / SCHOOL</small><h2>ICSE AI agent</h2><p>School learning and exam practice</p></button>
+</div>
+<section><div class="sectionhead"><h2 id="heading">All prompts</h2><span class="count" id="count">0 prompts</span></div><div class="cards" id="cards"></div></section>
+</main>
+<footer>Prompts added here are saved in this browser on this device. This starter version does not sync edits between visitors or devices.</footer>
+<dialog id="editor"><form class="modal" id="form"><h2 id="dialogTitle">Add a prompt</h2>
+<div class="field"><label for="title">Prompt title</label><input id="title" maxlength="90" required placeholder="e.g. B.Tech study tutor"></div>
+<div class="field"><label for="category">Collection</label><select id="category"><option value="btech">B.Tech + CS AI agent</option><option value="cbse">CBSE AI agent</option><option value="icse">ICSE AI agent</option></select></div>
+<div class="field"><label for="body">Prompt text</label><textarea id="body" required placeholder="Paste your complete prompt here…"></textarea></div>
+<div class="modalfoot"><button type="button" class="small" id="cancel">Cancel</button><button class="primary" type="submit">Save prompt</button></div>
+</form></dialog>
+<script>
+const KEY="study-prompts-v1";
+let prompts=[];try{prompts=JSON.parse(localStorage.getItem(KEY)||"[]")}catch{prompts=[]}
+let active="all",editing=null;
+const names={all:"All prompts",btech:"B.Tech + CS AI agent",cbse:"CBSE AI agent",icse:"ICSE AI agent"};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(prompts))}
+function render(){
+ document.querySelectorAll(".collection").forEach(b=>b.classList.toggle("active",b.dataset.category===active));
+ $("heading").textContent=names[active];
+ const q=$("search").value.trim().toLowerCase();
+ const shown=prompts.filter(p=>(active==="all"||p.category===active)&&(!q||(p.title+" "+p.text).toLowerCase().includes(q)));
+ $("count").textContent=shown.length+" prompt"+(shown.length===1?"":"s");
+ $("cards").innerHTML="";
+ if(!shown.length){const e=document.createElement("div");e.className="empty";e.textContent=prompts.length?"No matching prompts. Try another search.":"No prompts added yet. Select “Add prompt” to create your first one."; $("cards").append(e);return}
+ shown.forEach(p=>{
+  const card=document.createElement("article");card.className="prompt";
+  const info=document.createElement("div");const h=document.createElement("h3");h.textContent=p.title;const desc=document.createElement("p");desc.textContent=names[p.category];info.append(h,desc);
+  const actions=document.createElement("div");actions.className="actions";
+  const copy=document.createElement("button");copy.className="small";copy.textContent="Copy prompt";copy.onclick=async()=>{try{await navigator.clipboard.writeText(p.text);copy.textContent="Copied ✓";setTimeout(()=>copy.textContent="Copy prompt",1400)}catch{const t=document.createElement("textarea");t.value=p.text;document.body.append(t);t.select();document.execCommand("copy");t.remove();copy.textContent="Copied ✓";setTimeout(()=>copy.textContent="Copy prompt",1400)}};
+  const edit=document.createElement("button");edit.className="small";edit.textContent="Edit";edit.onclick=()=>openEditor(p.id);
+  const del=document.createElement("button");del.className="small";del.textContent="Delete";del.onclick=()=>{if(confirm("Delete this prompt?")){prompts=prompts.filter(x=>x.id!==p.id);save();render()}};
+  actions.append(copy,edit,del);card.append(info,actions);$("cards").append(card);
+ });
+}
+function openEditor(id){editing=id||null;const p=prompts.find(x=>x.id===id);$("dialogTitle").textContent=p?"Edit prompt":"Add a prompt";$("title").value=p?.title||"";$("category").value=p?.category||"btech";$("body").value=p?.text||"";$("editor").showModal()}
+$("collections").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(b){active=b.dataset.category;render()}});
+$("search").addEventListener("input",render);$("add").onclick=()=>openEditor();$("cancel").onclick=()=>$("editor").close();
+$("form").addEventListener("submit",e=>{e.preventDefault();const item={id:editing||crypto.randomUUID(),title:$("title").value.trim(),category:$("category").value,text:$("body").value.trim()};if(editing)prompts=prompts.map(p=>p.id===editing?item:p);else prompts.push(item);save();$("editor").close();active=item.category;render()});
+render();
+</script>
+</body></html>
