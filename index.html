@@ -155,22 +155,14 @@
   .prompt.placeholder p { color: var(--muted); }
   .prompt button.copy, .prompt button.copy.toggle { background: #2a0f5c; border-color: var(--purple); color: #f1ebff; }
   .prompt button.copy:hover, .prompt button.copy.toggle:hover { background: #4a1fa0; }
-  /* CSS-only crystal atmosphere: keeps the original dark-purple look without
-     exposing a canvas that triggers Swarm Rebuild's media-only capture path. */
-  #bg {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    background:
-      radial-gradient(ellipse at 78% 12%, rgba(139, 61, 255, .22), transparent 38%),
-      radial-gradient(ellipse at 18% 62%, rgba(90, 30, 190, .18), transparent 42%),
-      repeating-conic-gradient(from 18deg at 72% 28%, rgba(183,148,255,.035) 0deg 2deg, transparent 2deg 17deg),
-      repeating-conic-gradient(from 7deg at 24% 74%, rgba(139,61,255,.028) 0deg 3deg, transparent 3deg 19deg);
-    opacity: .9;
-  }
+  /* Original animated faceted-crystal background, rendered as SVG so
+     visual-capture tools do not mistake it for a canvas-only page. */
+  #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
   main { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
-<div id="bg" aria-hidden="true"></div>
+<svg id="bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
 <main>
   <header>
     <h1>Welcome to Aarav First Site</h1>
@@ -210,6 +202,80 @@
 </div>
 
 <script>
+  // Animated faceted crystal background (SVG version of the original canvas effect)
+  (function () {
+    const svg = document.getElementById("bg");
+    if (!svg) return;
+    const NS = "http://www.w3.org/2000/svg";
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, size = 100, verts = [], tris = [], faces = [];
+    const ptr = { x: 0.5, y: 0.35, active: false };
+    const sm = { x: 0.5, y: 0.35 };
+    function seeded(n) { const v = Math.sin(n * 127.1) * 43758.5453; return v - Math.floor(v); }
+    function build() {
+      W = window.innerWidth; H = window.innerHeight;
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      size = W < 600 ? 72 : 104;
+      const cols = Math.ceil(W / size) + 2, rows = Math.ceil(H / size) + 2;
+      verts = []; tris = []; faces = [];
+      for (let j = 0; j <= rows; j++) for (let i = 0; i <= cols; i++) {
+        const k = j * (cols + 1) + i;
+        verts.push({
+          x: (i - 0.5) * size + (seeded(k + 1) - 0.5) * size * 0.55,
+          y: (j - 0.5) * size + (seeded(k + 7) - 0.5) * size * 0.55,
+          z: 0.3 + seeded(k + 13) * 0.7
+        });
+      }
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+        const a = j * (cols + 1) + i, b = a + 1, c = a + cols + 1, d = c + 1;
+        const pair = (i + j) % 2 === 0 ? [[a,b,c],[b,d,c]] : [[a,b,d],[a,d,c]];
+        pair.forEach((v,n) => tris.push({ v, s: seeded(a * 2 + n + 3) }));
+      }
+      const frag = document.createDocumentFragment();
+      tris.forEach(() => {
+        const poly = document.createElementNS(NS, "polygon");
+        poly.setAttribute("stroke-width", "1");
+        poly.setAttribute("vector-effect", "non-scaling-stroke");
+        faces.push(poly); frag.appendChild(poly);
+      });
+      svg.replaceChildren(frag);
+    }
+    function frame(t) {
+      requestAnimationFrame(frame);
+      if (document.hidden) return;
+      if (!ptr.active && !reduce) {
+        ptr.x = 0.5 + Math.cos(t / 3500) * 0.3;
+        ptr.y = 0.4 + Math.sin(t / 4300) * 0.25;
+      }
+      sm.x += (ptr.x - sm.x) * 0.08; sm.y += (ptr.y - sm.y) * 0.08;
+      const px = sm.x * W, py = sm.y * H, R = Math.max(220, W * 0.22);
+      const ox = (sm.x - 0.5) * 36, oy = (sm.y - 0.5) * 36;
+      const p = verts.map(v => {
+        let x = v.x - ox * v.z, y = v.y - oy * v.z;
+        const dx = x - px, dy = y - py, d = Math.hypot(dx,dy);
+        if (d < R && d > 0.1) {
+          const f = Math.pow(1 - d / R, 2) * 26 * v.z;
+          x += dx / d * f; y += dy / d * f;
+        }
+        return [x,y];
+      });
+      for (let n = 0; n < tris.length; n++) {
+        const tr = tris[n], A = p[tr.v[0]], B = p[tr.v[1]], C = p[tr.v[2]];
+        const d = Math.hypot((A[0]+B[0]+C[0])/3-px, (A[1]+B[1]+C[1])/3-py);
+        const g = Math.max(0, 1-d/R), face = faces[n];
+        face.setAttribute("points", A.join(",")+" "+B.join(",")+" "+C.join(","));
+        face.setAttribute("fill", "hsla("+(262+tr.s*22)+",72%,"+(4+tr.s*9+g*g*28)+"%,0.62)");
+        face.setAttribute("stroke", "hsla(268,90%,78%,"+(0.07+g*0.4)+")");
+      }
+    }
+    window.addEventListener("pointermove", e => {
+      ptr.x = e.clientX / Math.max(W,1); ptr.y = e.clientY / Math.max(H,1); ptr.active = true;
+    });
+    document.documentElement.addEventListener("mouseleave", () => { ptr.active = false; });
+    window.addEventListener("resize", build);
+    build(); requestAnimationFrame(frame);
+  })();
+
   // Add prompts here as { title: "...", text: "..." }
   const PROMPTS = [
     {
