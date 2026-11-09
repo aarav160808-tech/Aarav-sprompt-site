@@ -46,10 +46,10 @@
     line-height: 1.02;
     letter-spacing: -0.03em;
     margin: 0 0 1.25rem;
-    color: #d9c5ff;
-    text-shadow: 0 0 28px rgba(183, 148, 255, 0.16);
+    color: #f1ebff;
+    text-shadow: none;
   }
-  .lead { color: var(--muted); font-size: 1.1rem; max-width: 52ch; margin: 0; }
+  .lead { color: #e2d9f3; font-size: 1.1rem; max-width: 52ch; margin: 0; }
   .section-head {
     display: flex; align-items: baseline; justify-content: space-between;
     gap: 1rem; border-bottom: 1px solid var(--line); padding-bottom: 0.9rem; margin-bottom: 1.5rem;
@@ -65,7 +65,7 @@
   }
   .prompt h3 { font-family: "Syne", sans-serif; font-weight: 600; font-size: 1.1rem; margin: 0 0 0.6rem; }
   .prompt p { margin: 0 0 1rem; white-space: pre-wrap; color: #ddd2f7; max-width: 70ch; }
-  .prompt p.clamped { max-height: 7.5rem; overflow: hidden; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+  .prompt p.clamped { max-height: 7.5rem; overflow: hidden; }
   .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
   button.toggle { background: transparent; border-color: var(--line); }
   button.copy {
@@ -158,6 +158,9 @@
   /* Original animated faceted-crystal background, rendered as SVG so
      visual-capture tools do not mistake it for a canvas-only page. */
   #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
+  /* Keep all page copy fully opaque and crisp; truncate long previews without fading. */
+  main, main * { opacity: 1; }
+  main h1, main h2, main h3, main p, main span, main button { -webkit-mask-image: none; mask-image: none; }
   main { position: relative; z-index: 1; }
 </style>
 </head>
