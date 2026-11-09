@@ -46,10 +46,8 @@
     line-height: 1.02;
     letter-spacing: -0.03em;
     margin: 0 0 1.25rem;
-    background: linear-gradient(120deg, #ffffff 20%, var(--violet) 70%, var(--purple));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #d9c5ff;
+    text-shadow: 0 0 28px rgba(183, 148, 255, 0.16);
   }
   .lead { color: var(--muted); font-size: 1.1rem; max-width: 52ch; margin: 0; }
   .section-head {
@@ -157,12 +155,22 @@
   .prompt.placeholder p { color: var(--muted); }
   .prompt button.copy, .prompt button.copy.toggle { background: #2a0f5c; border-color: var(--purple); color: #f1ebff; }
   .prompt button.copy:hover, .prompt button.copy.toggle:hover { background: #4a1fa0; }
-  #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  /* CSS-only crystal atmosphere: keeps the original dark-purple look without
+     exposing a canvas that triggers Swarm Rebuild's media-only capture path. */
+  #bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 78% 12%, rgba(139, 61, 255, .22), transparent 38%),
+      radial-gradient(ellipse at 18% 62%, rgba(90, 30, 190, .18), transparent 42%),
+      repeating-conic-gradient(from 18deg at 72% 28%, rgba(183,148,255,.035) 0deg 2deg, transparent 2deg 17deg),
+      repeating-conic-gradient(from 7deg at 24% 74%, rgba(139,61,255,.028) 0deg 3deg, transparent 3deg 19deg);
+    opacity: .9;
+  }
   main { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
-<canvas id="bg" aria-hidden="true"></canvas>
+<div id="bg" aria-hidden="true"></div>
 <main>
   <header>
     <h1>Welcome to Aarav First Site</h1>
@@ -1367,87 +1375,6 @@ Preserve the original system while improving its reliability. Do not simplify it
     document.querySelectorAll(".soon .reveal, .soon .pop").forEach(function (el) { el.classList.add("in"); });
   }, 1300 + PROMPTS.length * 200);
 </script>
-<script>
-  // Crystal background: faceted shards that shift and shine with the cursor
-  (function () {
-    const cv = document.getElementById("bg");
-    const ctx = cv && cv.getContext("2d");
-    if (!ctx) return;
-    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W = 0, H = 0, size = 100, verts = [], tris = [];
-    const ptr = { x: 0.5, y: 0.35, active: false };
-    const sm = { x: 0.5, y: 0.35 };
 
-    function seeded(n) { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); }
-
-    function build() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = window.innerWidth; H = window.innerHeight;
-      cv.width = W * dpr; cv.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      size = W < 600 ? 72 : 104;
-      const cols = Math.ceil(W / size) + 2;
-      const rows = Math.ceil(H / size) + 2;
-      verts = []; tris = [];
-      for (let j = 0; j <= rows; j++) for (let i = 0; i <= cols; i++) {
-        const k = j * (cols + 1) + i;
-        verts.push({
-          x: (i - 0.5) * size + (seeded(k + 1) - 0.5) * size * 0.55,
-          y: (j - 0.5) * size + (seeded(k + 7) - 0.5) * size * 0.55,
-          z: 0.3 + seeded(k + 13) * 0.7
-        });
-      }
-      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
-        const a = j * (cols + 1) + i, b = a + 1, c = a + cols + 1, d = c + 1;
-        const pair = (i + j) % 2 === 0 ? [[a, b, c], [b, d, c]] : [[a, b, d], [a, d, c]];
-        pair.forEach(function (v, n) { tris.push({ v: v, s: seeded(a * 2 + n + 3) }); });
-      }
-    }
-
-    function frame(t) {
-      requestAnimationFrame(frame);
-      if (document.hidden) return;
-      if (!ptr.active && !reduce) {
-        ptr.x = 0.5 + Math.cos(t / 3500) * 0.3;
-        ptr.y = 0.4 + Math.sin(t / 4300) * 0.25;
-      }
-      sm.x += (ptr.x - sm.x) * 0.08;
-      sm.y += (ptr.y - sm.y) * 0.08;
-      const px = sm.x * W, py = sm.y * H, R = Math.max(220, W * 0.22);
-      const ox = (sm.x - 0.5) * 36, oy = (sm.y - 0.5) * 36;
-      ctx.clearRect(0, 0, W, H);
-      const p = verts.map(function (v) {
-        let x = v.x - ox * v.z, y = v.y - oy * v.z;
-        const dx = x - px, dy = y - py, d = Math.sqrt(dx * dx + dy * dy);
-        if (d < R && d > 0.1) {
-          const f = Math.pow(1 - d / R, 2) * 26 * v.z;
-          x += (dx / d) * f; y += (dy / d) * f;
-        }
-        return [x, y];
-      });
-      ctx.lineWidth = 1;
-      for (let n = 0; n < tris.length; n++) {
-        const tr = tris[n], A = p[tr.v[0]], B = p[tr.v[1]], C = p[tr.v[2]];
-        const d = Math.hypot((A[0] + B[0] + C[0]) / 3 - px, (A[1] + B[1] + C[1]) / 3 - py);
-        const g = Math.max(0, 1 - d / R);
-        ctx.beginPath();
-        ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.lineTo(C[0], C[1]);
-        ctx.closePath();
-        ctx.fillStyle = "hsla(" + (262 + tr.s * 22) + ",72%," + (4 + tr.s * 9 + g * g * 28) + "%,0.62)";
-        ctx.fill();
-        ctx.strokeStyle = "hsla(268,90%,78%," + (0.07 + g * 0.4) + ")";
-        ctx.stroke();
-      }
-    }
-
-    window.addEventListener("pointermove", function (e) {
-      ptr.x = e.clientX / W; ptr.y = e.clientY / H; ptr.active = true;
-    });
-    document.documentElement.addEventListener("mouseleave", function () { ptr.active = false; });
-    window.addEventListener("resize", build);
-    build();
-    requestAnimationFrame(frame);
-  })();
-</script>
 </body>
 </html>
