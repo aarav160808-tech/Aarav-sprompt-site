@@ -240,6 +240,45 @@
     header, main > section { padding: 1.1rem; }
   }
 
+
+  /* Final layer order: animated background behind all page content; no text panels. */
+  body { position: relative; isolation: isolate; }
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1 !important;
+    pointer-events: none;
+  }
+  main {
+    position: relative;
+    z-index: 1 !important;
+    background: transparent !important;
+  }
+  header,
+  main > section {
+    position: relative;
+    z-index: 1 !important;
+    isolation: auto !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  header::before,
+  main > section::before {
+    content: none !important;
+    display: none !important;
+  }
+  header h1, header .lead,
+  main > section h2, main > section .count,
+  main > section .prompt, main > section .badge {
+    position: relative;
+    z-index: 2 !important;
+    opacity: 1 !important;
+  }
+
 </style>
 </head>
 <body>
