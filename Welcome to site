@@ -153,13 +153,13 @@
   .prompt.placeholder p { color: var(--muted); }
   .prompt button.copy, .prompt button.copy.toggle { background: #2a0f5c; border-color: var(--purple); color: #f1ebff; }
   .prompt button.copy:hover, .prompt button.copy.toggle:hover { background: #4a1fa0; }
-  /* Animated faceted-crystal background scrolls with the document, behind page content. */
+  /* Animated faceted-crystal background stays fixed behind the page, so it covers the screen at every scroll position. */
   #bg {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
@@ -238,51 +238,6 @@
   .prompt p { color: #f1ebff !important; }
   .prompt.placeholder p { color: #e3d7f7 !important; }
   .prompt p.clamped { opacity: 1 !important; }
-
-  /* Final readability-first design: quiet light background, clear dark text. */
-  html, body { background: #f7f7fb !important; color: #171321 !important; }
-  body { background-image: none !important; }
-  #bg { display: none !important; }
-  main { color: #171321 !important; }
-  header, main > section {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-  header::before, main > section::before { content: none !important; display: none !important; }
-  h1, h2, h3, .prompt h3, #saved, #next {
-    color: #171321 !important;
-    text-shadow: none !important;
-    -webkit-text-fill-color: #171321 !important;
-  }
-  .lead, .prompt p, .prompt.placeholder p {
-    color: #393447 !important;
-    text-shadow: none !important;
-    -webkit-text-fill-color: #393447 !important;
-  }
-  .count { color: #625b70 !important; text-shadow: none !important; }
-  .badge {
-    color: #5532a3 !important;
-    background: #eee8ff !important;
-    border-color: #d8cafa !important;
-    text-shadow: none !important;
-  }
-  .prompt, .prompt.placeholder {
-    background: #ffffff !important;
-    color: #171321 !important;
-    border: 1px solid #e5e1ed !important;
-    box-shadow: 0 4px 16px rgba(32, 20, 55, 0.06) !important;
-    animation: none !important;
-  }
-  .prompt.placeholder::before { display: none !important; animation: none !important; }
-  .prompt p.clamped { color: #393447 !important; opacity: 1 !important; }
-  button.copy, .prompt button.copy, .prompt button.copy.toggle {
-    color: #ffffff !important;
-    background: #5532a3 !important;
-    border: 1px solid #5532a3 !important;
-    text-shadow: none !important;
-  }
-  button.copy:hover, .prompt button.copy:hover { background: #432580 !important; }
   </style>
 </head>
 <body>
