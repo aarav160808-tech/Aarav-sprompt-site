@@ -153,9 +153,9 @@
   .prompt.placeholder p { color: var(--muted); }
   .prompt button.copy, .prompt button.copy.toggle { background: #2a0f5c; border-color: var(--purple); color: #f1ebff; }
   .prompt button.copy:hover, .prompt button.copy.toggle:hover { background: #4a1fa0; }
-  /* Animated faceted-crystal background stays fixed behind the page, so it covers the screen at every scroll position. */
+  /* Animated faceted-crystal background scrolls with the document, behind page content. */
   #bg {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
