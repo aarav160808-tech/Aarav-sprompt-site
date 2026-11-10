@@ -279,6 +279,38 @@
     opacity: 1 !important;
   }
 
+
+  /* Contrast correction: dim the animated purple mesh, keep foreground typography fully opaque. */
+  #bg {
+    z-index: 0 !important;
+    opacity: 0.22 !important;
+  }
+  main {
+    position: relative !important;
+    z-index: 1 !important;
+    color: #ffffff !important;
+  }
+  header, main > section {
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    isolation: auto !important;
+  }
+  header h1, main h2, main h3,
+  .lead, .prompt p, .count, .badge,
+  .empty, .empty strong, button.copy {
+    opacity: 1 !important;
+    -webkit-text-fill-color: currentColor !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.95) !important;
+  }
+  header h1, main h2, main h3 { color: #ffffff !important; }
+  .lead, .prompt p { color: #f5f2ff !important; }
+  .count { color: #e2dcf0 !important; }
+  .badge { color: #ffffff !important; }
+  .prompt p.clamped { opacity: 1 !important; }
+
 </style>
 </head>
 <body>
