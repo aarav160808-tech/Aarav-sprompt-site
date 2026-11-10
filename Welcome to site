@@ -241,7 +241,80 @@
   .prompt p { color: #f1ebff !important; }
   .prompt.placeholder p { color: #e3d7f7 !important; }
   .prompt p.clamped { opacity: 1 !important; }
-  </style>
+  
+  /* Extension-resistant readability: keep page content crisp above injected backgrounds. */
+  html body {
+    color: #f1ebff !important;
+    -webkit-text-size-adjust: 100%;
+  }
+  body > main,
+  body > main * {
+    opacity: 1 !important;
+    visibility: visible;
+    filter: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    mix-blend-mode: normal !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+  body > main {
+    position: relative !important;
+    z-index: 10 !important;
+    isolation: isolate !important;
+  }
+  body > main :is(h1,h2,h3,p,span,strong,small,label,a,li,button) {
+    opacity: 1 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    -webkit-text-fill-color: currentColor !important;
+    -webkit-text-stroke: 0 transparent !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9) !important;
+  }
+  body > main header,
+  body > main > section {
+    position: relative !important;
+    z-index: 2 !important;
+    isolation: isolate !important;
+    background: rgba(10, 4, 20, .94) !important;
+    border: 1px solid rgba(183, 148, 255, .28) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 32px rgba(0,0,0,.38) !important;
+  }
+  body > main header h1,
+  body > main h2,
+  body > main .prompt h3 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  body > main .lead,
+  body > main .prompt p {
+    color: #f1ebff !important;
+    -webkit-text-fill-color: #f1ebff !important;
+  }
+  body > main .count { color: #e0d2fa !important; -webkit-text-fill-color: #e0d2fa !important; }
+  body > main .badge { color: #e8dcff !important; -webkit-text-fill-color: #e8dcff !important; }
+  body > main .prompt,
+  body > main .prompt.placeholder {
+    background: #10051e !important;
+    color: #f1ebff !important;
+    border: 1px solid rgba(183, 148, 255, .38) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.42) !important;
+  }
+  body > main button.copy {
+    background: #5120a8 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: 1px solid #a879ff !important;
+    opacity: 1 !important;
+  }
+  body > #bg {
+    position: absolute !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+  }
+
+</style>
 </head>
 <body>
 <svg id="bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
