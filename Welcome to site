@@ -188,133 +188,30 @@
     z-index: 1;
   }
 
-  /* Foreground readability fix: solid panels and explicit stacking above the animated SVG. */
-  #bg {
-    z-index: 0;
-  }
-  main {
+
+  /* Final clean layer and contrast rules, based on the original recording. */
+  html, body { min-height: 100%; }
+  body {
     position: relative;
-    z-index: 2;
-  }
-  header,
-  main > section {
-    position: relative;
-    z-index: 2;
     isolation: isolate;
-    background: rgba(8, 3, 17, 0.96);
-    border: 1px solid rgba(183, 148, 255, 0.22);
-    border-radius: 18px;
-    padding: clamp(1.25rem, 3vw, 2rem);
-    margin-bottom: 1.5rem;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+    background: #12062a;
+    color: #f1ebff;
   }
-  header {
-    padding-top: clamp(3rem, 10vh, 6rem);
-  }
-  header h1,
-  header .lead,
-  main > section h2,
-  main > section .count,
-  main > section .prompt,
-  main > section .badge {
-    position: relative;
-    z-index: 3;
-    opacity: 1 !important;
-    color: var(--text);
-    -webkit-text-fill-color: currentColor;
-    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
-  }
-  header .lead,
-  .prompt p {
-    color: #eee7ff !important;
-  }
-  .prompt {
-    position: relative;
-    z-index: 3;
-    background: #160d25 !important;
-    border-color: rgba(183, 148, 255, 0.35);
-  }
-  .prompt h3 { color: #ffffff !important; }
-  .prompt p { color: #e9e0fa !important; }
-  @media (max-width: 600px) {
-    header, main > section { padding: 1.1rem; }
-  }
-
-
-  /* Final layer order: animated background behind all page content; no text panels. */
-  body { position: relative; isolation: isolate; }
   #bg {
-    position: fixed;
-    inset: 0;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     z-index: -1 !important;
-    pointer-events: none;
-  }
-  main {
-    position: relative;
-    z-index: 1 !important;
-    background: transparent !important;
-  }
-  header,
-  main > section {
-    position: relative;
-    z-index: 1 !important;
-    isolation: auto !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-  header::before,
-  main > section::before {
-    content: none !important;
-    display: none !important;
-  }
-  header h1, header .lead,
-  main > section h2, main > section .count,
-  main > section .prompt, main > section .badge {
-    position: relative;
-    z-index: 2 !important;
     opacity: 1 !important;
-  }
-
-
-  /* Contrast correction: dim the animated purple mesh, keep foreground typography fully opaque. */
-  #bg {
-    z-index: 0 !important;
-    opacity: 0.22 !important;
+    pointer-events: none !important;
   }
   main {
     position: relative !important;
     z-index: 1 !important;
-    color: #ffffff !important;
-  }
-  header, main > section {
-    position: relative !important;
-    z-index: 1 !important;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    isolation: auto !important;
-  }
-  header h1, main h2, main h3,
-  .lead, .prompt p, .count, .badge,
-  .empty, .empty strong, button.copy {
+    color: #f1ebff !important;
     opacity: 1 !important;
-    -webkit-text-fill-color: currentColor !important;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.95) !important;
   }
-  header h1, main h2, main h3 { color: #ffffff !important; }
-  .lead, .prompt p { color: #f5f2ff !important; }
-  .count { color: #e2dcf0 !important; }
-  .badge { color: #ffffff !important; }
-  .prompt p.clamped { opacity: 1 !important; }
-
-
-  /* Recording-matched balance: keep the purple mesh vivid, prevent bright purple wash, keep text crisp. */
-  #bg { z-index: 0 !important; opacity: 1 !important; }
-  main { position: relative !important; z-index: 1 !important; color: #fff !important; }
   header, main > section {
     position: relative !important;
     z-index: 1 !important;
@@ -324,15 +221,24 @@
     isolation: auto !important;
   }
   header::before, main > section::before { content: none !important; display: none !important; }
-  header h1, main h2, main h3, .lead, .prompt p, .count, .badge, .empty, .empty strong {
+  header h1, main h2, main h3, .lead, .prompt p, .count, .badge,
+  .empty, .empty strong, .prompt button {
     opacity: 1 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
     -webkit-text-fill-color: currentColor !important;
-    text-shadow: 0 1px 3px rgba(0,0,0,.9) !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,.75) !important;
   }
-  header h1, main h2, main h3 { color: #fff !important; }
-  .lead, .prompt p { color: #f4efff !important; }
-
-</style>
+  header h1, main h2, main h3 { color: #ffffff !important; }
+  .lead, .prompt p { color: #f1ebff !important; }
+  .count { color: #d8c9f3 !important; }
+  .badge { color: #e8dcff !important; }
+  .prompt { background: rgba(16, 5, 30, .72) !important; }
+  .prompt h3 { color: #ffffff !important; }
+  .prompt p { color: #f1ebff !important; }
+  .prompt.placeholder p { color: #e3d7f7 !important; }
+  .prompt p.clamped { opacity: 1 !important; }
+  </style>
 </head>
 <body>
 <svg id="bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -437,8 +343,8 @@
         const d = Math.hypot((A[0]+B[0]+C[0])/3-px, (A[1]+B[1]+C[1])/3-py);
         const g = Math.max(0, 1-d/R), face = faces[n];
         face.setAttribute("points", A.join(",")+" "+B.join(",")+" "+C.join(","));
-        face.setAttribute("fill", "hsla("+(262+tr.s*22)+",72%,"+(5+tr.s*9+g*g*20)+"%,0.52)");
-        face.setAttribute("stroke", "hsla(268,90%,78%,"+(0.05+g*0.24)+")");
+        face.setAttribute("fill", "hsla("+(262+tr.s*22)+",72%,"+(5+tr.s*9+g*g*20)+"%,0.62)");
+        face.setAttribute("stroke", "hsla(268,90%,78%,"+(0.07+g*0.4)+")");
       }
     }
     window.addEventListener("pointermove", e => {
