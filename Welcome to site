@@ -187,6 +187,59 @@
     position: relative;
     z-index: 1;
   }
+
+  /* Foreground readability fix: solid panels and explicit stacking above the animated SVG. */
+  #bg {
+    z-index: 0;
+  }
+  main {
+    position: relative;
+    z-index: 2;
+  }
+  header,
+  main > section {
+    position: relative;
+    z-index: 2;
+    isolation: isolate;
+    background: rgba(8, 3, 17, 0.96);
+    border: 1px solid rgba(183, 148, 255, 0.22);
+    border-radius: 18px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
+  }
+  header {
+    padding-top: clamp(3rem, 10vh, 6rem);
+  }
+  header h1,
+  header .lead,
+  main > section h2,
+  main > section .count,
+  main > section .prompt,
+  main > section .badge {
+    position: relative;
+    z-index: 3;
+    opacity: 1 !important;
+    color: var(--text);
+    -webkit-text-fill-color: currentColor;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+  }
+  header .lead,
+  .prompt p {
+    color: #eee7ff !important;
+  }
+  .prompt {
+    position: relative;
+    z-index: 3;
+    background: #160d25 !important;
+    border-color: rgba(183, 148, 255, 0.35);
+  }
+  .prompt h3 { color: #ffffff !important; }
+  .prompt p { color: #e9e0fa !important; }
+  @media (max-width: 600px) {
+    header, main > section { padding: 1.1rem; }
+  }
+
 </style>
 </head>
 <body>
